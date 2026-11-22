@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fitplan-app-test-api",
+  "compatibility_date": "2026-11-19",
+  "assets": {
+    "directory": "./dist/fitplan-frontend/browser",
+    "not_found_handling": "single-page-application"
+  }
+}
