@@ -1,0 +1,8 @@
+<div class="empty" [class.error]="tone() === 'error'">
+  <span class="badge"><app-icon [name]="icon()" [size]="22" /></span>
+  <h3>{{ title() }}</h3>
+  @if (text()) {
+    <p>{{ text() }}</p>
+  }
+  <div class="slot"><ng-content /></div>
+</div>

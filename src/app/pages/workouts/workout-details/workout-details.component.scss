@@ -1,0 +1,67 @@
+.cover {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.bar {
+  display: grid;
+  gap: 12px;
+}
+
+.created {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.bar-actions {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.info {
+  display: grid;
+  min-width: 0;
+
+  strong {
+    font-weight: 600;
+  }
+
+  span {
+    color: var(--muted);
+    font-size: 13px;
+  }
+}
+
+.load {
+  display: grid;
+  justify-items: end;
+}
+
+.amount {
+  color: var(--blue);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.hint {
+  color: var(--faint);
+  font-size: 11px;
+}
+
+.none {
+  padding: 24px 0;
+  color: var(--muted);
+}

@@ -1,0 +1,69 @@
+<div class="page">
+  <app-header
+    title="Exercícios"
+    searchPlaceholder="Buscar exercício por nome"
+    (searchChange)="term.set($event)"
+  />
+
+  @switch (status()) {
+    @case ('loading') {
+      <app-loading label="Carregando exercícios" />
+    }
+    @case ('error') {
+      <app-empty-state icon="alert" tone="error" title="Não foi possível carregar os exercícios" text="Verifique se a API está em execução e tente novamente.">
+        <button class="btn" type="button" (click)="load()">Tentar novamente</button>
+      </app-empty-state>
+    }
+    @default {
+      @if (items().length === 0) {
+        <app-empty-state icon="dumbbell" title="Nenhum exercício cadastrado" text="Cadastre os exercícios para montar seus treinos.">
+          <button class="btn btn-primary" type="button" (click)="openCreate()">
+            <app-icon name="plus" [size]="16" />
+            Novo exercício
+          </button>
+        </app-empty-state>
+      } @else if (visible().length === 0) {
+        <app-empty-state icon="search" title="Nenhum resultado" text="Nenhum exercício corresponde à busca." />
+      } @else {
+        <ul class="rows">
+          @for (item of visible(); track item.ID) {
+            <li class="row">
+              <div class="info">
+                <strong>{{ item.Name }}</strong>
+                <span class="load">{{ item.Weight }} kg, {{ item.Sets }} × {{ item.Reps }}</span>
+                <span>Criado em {{ item.CreatedAt | date: 'dd/MM/yyyy' }}</span>
+              </div>
+              <button class="btn-icon" type="button" [attr.aria-label]="'Editar ' + item.Name" (click)="openEdit(item)">
+                <app-icon name="pencil" />
+              </button>
+              <button class="btn-icon danger" type="button" [attr.aria-label]="'Excluir ' + item.Name" (click)="removing.set(item)">
+                <app-icon name="trash" />
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+</div>
+
+<button class="fab" type="button" (click)="openCreate()">
+  <app-icon name="plus" />
+  Novo exercício
+</button>
+
+@if (formOpen()) {
+  <app-modal [title]="editing() ? 'Editar exercício' : 'Novo exercício'" (closed)="closeForm()">
+    <app-exercise-form [exercise]="editing()" (saved)="onSaved()" (cancelled)="closeForm()" />
+  </app-modal>
+}
+
+@if (removing(); as target) {
+  <app-confirm-dialog
+    title="Excluir exercício"
+    [message]="'O exercício ' + target.Name + ' será excluído. Essa ação não pode ser desfeita.'"
+    [busy]="removeBusy()"
+    (confirmed)="confirmRemove()"
+    (cancelled)="removing.set(null)"
+  />
+}

@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 6px 10px 16px;
+}
+
+.info {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+
+  strong {
+    overflow: hidden;
+    font-size: 16px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  span {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .load {
+    color: var(--blue);
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

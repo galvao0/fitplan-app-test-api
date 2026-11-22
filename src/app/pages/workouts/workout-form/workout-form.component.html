@@ -1,0 +1,22 @@
+<form class="form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="field">
+    <label for="workout-name">Nome</label>
+    <input id="workout-name" class="input" type="text" formControlName="name" placeholder="Treino A, peito e tríceps" autocomplete="off" />
+    @if (fieldError(form.controls.name); as message) {
+      <span class="field-error">{{ message }}</span>
+    }
+  </div>
+  <div class="field">
+    <label for="workout-image">URL da imagem (opcional)</label>
+    <input id="workout-image" class="input" type="url" formControlName="image" placeholder="https://" autocomplete="off" />
+    @if (fieldError(form.controls.image); as message) {
+      <span class="field-error">{{ message }}</span>
+    }
+  </div>
+  <div class="footer">
+    <button class="btn" type="button" [disabled]="busy()" (click)="cancelled.emit()">Cancelar</button>
+    <button class="btn btn-primary" type="submit" [disabled]="busy()">
+      {{ busy() ? 'Salvando...' : workout() ? 'Salvar alterações' : 'Criar treino' }}
+    </button>
+  </div>
+</form>

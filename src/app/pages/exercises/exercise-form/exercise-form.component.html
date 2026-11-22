@@ -1,0 +1,38 @@
+<form class="form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="field">
+    <label for="exercise-name">Nome</label>
+    <input id="exercise-name" class="input" type="text" formControlName="name" placeholder="Supino reto" autocomplete="off" />
+    @if (fieldError(form.controls.name); as message) {
+      <span class="field-error">{{ message }}</span>
+    }
+  </div>
+  <div class="row">
+    <div class="field">
+      <label for="exercise-weight">Peso (kg)</label>
+      <input id="exercise-weight" class="input" type="number" min="0" step="1" inputmode="numeric" formControlName="weight" />
+      @if (fieldError(form.controls.weight); as message) {
+        <span class="field-error">{{ message }}</span>
+      }
+    </div>
+    <div class="field">
+      <label for="exercise-sets">Séries</label>
+      <input id="exercise-sets" class="input" type="number" min="0" step="1" inputmode="numeric" formControlName="sets" />
+      @if (fieldError(form.controls.sets); as message) {
+        <span class="field-error">{{ message }}</span>
+      }
+    </div>
+    <div class="field">
+      <label for="exercise-reps">Repetições</label>
+      <input id="exercise-reps" class="input" type="number" min="0" step="1" inputmode="numeric" formControlName="reps" />
+      @if (fieldError(form.controls.reps); as message) {
+        <span class="field-error">{{ message }}</span>
+      }
+    </div>
+  </div>
+  <div class="footer">
+    <button class="btn" type="button" [disabled]="busy()" (click)="cancelled.emit()">Cancelar</button>
+    <button class="btn btn-primary" type="submit" [disabled]="busy()">
+      {{ busy() ? 'Salvando...' : exercise() ? 'Salvar alterações' : 'Criar exercício' }}
+    </button>
+  </div>
+</form>

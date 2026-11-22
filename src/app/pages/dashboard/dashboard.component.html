@@ -1,0 +1,70 @@
+<div class="page">
+  <app-header title="Início" subtitle="Resumo dos seus treinos e exercícios" />
+
+  @switch (status()) {
+    @case ('loading') {
+      <app-loading label="Carregando dados" />
+    }
+    @case ('error') {
+      <app-empty-state icon="alert" tone="error" title="Não foi possível carregar" text="Verifique se a API está em execução e tente novamente.">
+        <button class="btn" type="button" (click)="load()">Tentar novamente</button>
+      </app-empty-state>
+    }
+    @default {
+      <section class="figures" aria-label="Totais">
+        <div class="figure">
+          <span class="number">{{ workoutList().length }}</span>
+          <span class="caption">Treinos cadastrados</span>
+        </div>
+        <div class="figure">
+          <span class="number">{{ exerciseList().length }}</span>
+          <span class="caption">Exercícios cadastrados</span>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Treinos recentes</h2>
+          <a routerLink="/workouts">Ver todos</a>
+        </div>
+        @if (recent().length === 0) {
+          <p class="none">Nenhum treino criado ainda.</p>
+        } @else {
+          <ul class="rows">
+            @for (item of recent(); track item.ID) {
+              <li class="row">
+                <div class="thumb"><app-cover [src]="item.Image" [alt]="item.Name" /></div>
+                <div class="info">
+                  <a class="stretch" [routerLink]="['/workouts', item.ID]">{{ item.Name }}</a>
+                  <span>{{ count(item) | plural: 'exercício' : 'exercícios' }}, criado em {{ item.CreatedAt | date: 'dd/MM/yyyy' }}</span>
+                </div>
+                <app-icon name="chevron" [size]="18" />
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section>
+        <div class="section-head"><h2>Ações rápidas</h2></div>
+        <ul class="rows">
+          <li class="row quick">
+            <app-icon name="plus" />
+            <a class="stretch" routerLink="/workouts" [queryParams]="{ new: 1 }">Criar treino</a>
+            <app-icon name="chevron" [size]="18" />
+          </li>
+          <li class="row quick">
+            <app-icon name="plus" />
+            <a class="stretch" routerLink="/exercises" [queryParams]="{ new: 1 }">Criar exercício</a>
+            <app-icon name="chevron" [size]="18" />
+          </li>
+          <li class="row quick">
+            <app-icon name="clipboard" />
+            <a class="stretch" routerLink="/workouts">Visualizar treinos</a>
+            <app-icon name="chevron" [size]="18" />
+          </li>
+        </ul>
+      </section>
+    }
+  }
+</div>

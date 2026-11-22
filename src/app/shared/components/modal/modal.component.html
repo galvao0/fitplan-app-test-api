@@ -1,0 +1,18 @@
+<div class="backdrop" (mousedown)="closed.emit()">
+  <div
+    class="dialog"
+    [class.wide]="wide()"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="title()"
+    (mousedown)="$event.stopPropagation()"
+  >
+    <div class="dialog-head">
+      <h2>{{ title() }}</h2>
+      <button class="btn-icon" type="button" aria-label="Fechar" (click)="closed.emit()">
+        <app-icon name="x" />
+      </button>
+    </div>
+    <div class="dialog-body"><ng-content /></div>
+  </div>
+</div>

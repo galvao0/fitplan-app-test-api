@@ -1,0 +1,92 @@
+<div class="page">
+  <app-header
+    title="Treinos"
+    searchPlaceholder="Buscar treino por nome"
+    (searchChange)="term.set($event)"
+  />
+
+  @switch (status()) {
+    @case ('loading') {
+      <app-loading label="Carregando treinos" />
+    }
+    @case ('error') {
+      <app-empty-state icon="alert" tone="error" title="Não foi possível carregar os treinos" text="Verifique se a API está em execução e tente novamente.">
+        <button class="btn" type="button" (click)="load()">Tentar novamente</button>
+      </app-empty-state>
+    }
+    @default {
+      @if (items().length === 0) {
+        <app-empty-state icon="clipboard" title="Nenhum treino cadastrado" text="Crie o primeiro treino e depois associe exercícios a ele.">
+          <button class="btn btn-primary" type="button" (click)="openCreate()">
+            <app-icon name="plus" [size]="16" />
+            Novo treino
+          </button>
+        </app-empty-state>
+      } @else if (visible().length === 0) {
+        <app-empty-state icon="search" title="Nenhum resultado" text="Nenhum treino corresponde à busca." />
+      } @else {
+        <ul class="rows">
+          @for (item of visible(); track item.ID) {
+            <li class="row">
+              <div class="thumb"><app-cover [src]="item.Image" [alt]="item.Name" /></div>
+              <div class="info">
+                <a class="stretch" [routerLink]="['/workouts', item.ID]">{{ item.Name }}</a>
+                <span>{{ count(item) | plural: 'exercício' : 'exercícios' }}</span>
+                <span>Criado em {{ item.CreatedAt | date: 'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="menu-wrap">
+                <button
+                  class="btn-icon"
+                  type="button"
+                  aria-haspopup="menu"
+                  [attr.aria-expanded]="openMenu() === item.ID"
+                  [attr.aria-label]="'Ações de ' + item.Name"
+                  (click)="toggleMenu(item.ID, $event)"
+                >
+                  <app-icon name="more" />
+                </button>
+                @if (openMenu() === item.ID) {
+                  <div class="menu" role="menu">
+                    <a role="menuitem" [routerLink]="['/workouts', item.ID]">
+                      <app-icon name="eye" [size]="18" />
+                      Visualizar
+                    </a>
+                    <button role="menuitem" type="button" (click)="openEdit(item)">
+                      <app-icon name="pencil" [size]="18" />
+                      Editar
+                    </button>
+                    <button role="menuitem" type="button" class="danger" (click)="removing.set(item)">
+                      <app-icon name="trash" [size]="18" />
+                      Excluir
+                    </button>
+                  </div>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+</div>
+
+<button class="fab" type="button" (click)="openCreate()">
+  <app-icon name="plus" />
+  Novo treino
+</button>
+
+@if (formOpen()) {
+  <app-modal [title]="editing() ? 'Editar treino' : 'Novo treino'" (closed)="closeForm()">
+    <app-workout-form [workout]="editing()" (saved)="onSaved()" (cancelled)="closeForm()" />
+  </app-modal>
+}
+
+@if (removing(); as target) {
+  <app-confirm-dialog
+    title="Excluir treino"
+    [message]="'O treino ' + target.Name + ' será excluído. Essa ação não pode ser desfeita.'"
+    [busy]="removeBusy()"
+    (confirmed)="confirmRemove()"
+    (cancelled)="removing.set(null)"
+  />
+}

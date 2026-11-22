@@ -1,0 +1,12 @@
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.footer {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 10px;
+  margin-top: 6px;
+}

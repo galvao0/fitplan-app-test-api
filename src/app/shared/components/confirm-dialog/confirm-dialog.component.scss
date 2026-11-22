@@ -1,0 +1,12 @@
+.message {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.footer {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 10px;
+  margin-top: 22px;
+}

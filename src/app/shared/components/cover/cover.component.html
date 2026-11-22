@@ -1,0 +1,7 @@
+@if (src() && !broken()) {
+  <img [src]="src()" [alt]="alt()" loading="lazy" (error)="broken.set(true)" />
+} @else {
+  <div class="placeholder" role="img" [attr.aria-label]="alt()">
+    <app-icon name="image" [size]="28" />
+  </div>
+}

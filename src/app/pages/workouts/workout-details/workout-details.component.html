@@ -1,0 +1,104 @@
+<div class="page">
+  <app-header [title]="workout()?.Name ?? 'Treino'" backLink="/workouts" backLabel="Treinos" />
+
+  @switch (status()) {
+    @case ('loading') {
+      <app-loading label="Carregando treino" />
+    }
+    @case ('error') {
+      <app-empty-state icon="alert" tone="error" title="Não foi possível carregar o treino" text="O treino pode não existir mais ou a API está indisponível.">
+        <button class="btn" type="button" (click)="load()">Tentar novamente</button>
+        <a class="btn" routerLink="/workouts">Voltar para treinos</a>
+      </app-empty-state>
+    }
+    @default {
+      @if (workout(); as current) {
+        <div class="cover"><app-cover [src]="current.Image" [alt]="current.Name" /></div>
+
+        <div class="bar">
+          <span class="created">Criado em {{ current.CreatedAt | date: 'dd/MM/yyyy' }}</span>
+          <div class="bar-actions">
+            <button class="btn" type="button" (click)="editOpen.set(true)">
+              <app-icon name="pencil" [size]="16" />Editar
+            </button>
+            <button class="btn btn-danger" type="button" (click)="removeOpen.set(true)">
+              <app-icon name="trash" [size]="16" />Excluir
+            </button>
+          </div>
+        </div>
+
+        <section class="figures" aria-label="Estatísticas do treino">
+          <div class="figure">
+            <span class="number">{{ exercises().length }}</span>
+            <span class="caption">Exercícios</span>
+          </div>
+          <div class="figure">
+            <span class="number">{{ totalSets() }}</span>
+            <span class="caption">Séries</span>
+          </div>
+          <div class="figure">
+            <span class="number">{{ totalReps() }}</span>
+            <span class="caption">Repetições</span>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-head">
+            <h2>Exercícios</h2>
+            <button type="button" (click)="pickerOpen.set(true)">Adicionar</button>
+          </div>
+          @if (exercises().length === 0) {
+            <p class="none">Nenhum exercício associado a este treino.</p>
+          } @else {
+            <ul class="rows">
+              @for (item of exercises(); track item.ID) {
+                <li class="row">
+                  <div class="info">
+                    <strong>{{ item.Name }}</strong>
+                    <span>{{ item.Weight }} kg</span>
+                  </div>
+                  <div class="load">
+                    <span class="amount">{{ item.Sets }} × {{ item.Reps }}</span>
+                    <span class="hint">séries × repetições</span>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </section>
+
+        @if (editOpen()) {
+          <app-modal title="Editar treino" (closed)="editOpen.set(false)">
+            <app-workout-form [workout]="current" (saved)="onEdited()" (cancelled)="editOpen.set(false)" />
+          </app-modal>
+        }
+
+        @if (pickerOpen()) {
+          <app-exercise-picker
+            [workoutId]="current.ID"
+            [attached]="attachedIds()"
+            (added)="onAttached()"
+            (closed)="pickerOpen.set(false)"
+          />
+        }
+
+        @if (removeOpen()) {
+          <app-confirm-dialog
+            title="Excluir treino"
+            [message]="'O treino ' + current.Name + ' será excluído. Essa ação não pode ser desfeita.'"
+            [busy]="removeBusy()"
+            (confirmed)="confirmRemove()"
+            (cancelled)="removeOpen.set(false)"
+          />
+        }
+      }
+    }
+  }
+</div>
+
+@if (status() === 'ready' && workout()) {
+  <button class="fab" type="button" (click)="pickerOpen.set(true)">
+    <app-icon name="plus" />
+    Adicionar exercício
+  </button>
+}

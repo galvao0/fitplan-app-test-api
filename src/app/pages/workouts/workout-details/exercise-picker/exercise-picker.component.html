@@ -1,0 +1,50 @@
+<app-modal title="Adicionar exercício" [wide]="true" (closed)="closed.emit()">
+  <label class="search">
+    <app-icon name="search" [size]="16" />
+    <input type="search" placeholder="Buscar exercício por nome" aria-label="Buscar exercício por nome" (input)="onSearch($event)" />
+  </label>
+
+  @switch (status()) {
+    @case ('loading') {
+      <app-loading label="Carregando exercícios" />
+    }
+    @case ('error') {
+      <div class="notice">
+        <p>Não foi possível carregar os exercícios.</p>
+        <button class="btn" type="button" (click)="load()">Tentar novamente</button>
+      </div>
+    }
+    @default {
+      @if (items().length === 0) {
+        <div class="notice">
+          <p>Nenhum exercício cadastrado.</p>
+          <a class="btn btn-primary" routerLink="/exercises" [queryParams]="{ new: 1 }" (click)="closed.emit()">Criar exercício</a>
+        </div>
+      } @else if (visible().length === 0) {
+        <div class="notice"><p>Nenhum exercício corresponde à busca.</p></div>
+      } @else {
+        <ul class="list">
+          @for (item of visible(); track item.ID) {
+            <li class="item">
+              <div class="info">
+                <strong>{{ item.Name }}</strong>
+                <span>{{ item.Weight }} kg, {{ item.Sets }} séries de {{ item.Reps }} repetições</span>
+              </div>
+              @if (isAttached(item.ID)) {
+                <span class="done"><app-icon name="check" [size]="16" />Adicionado</span>
+              } @else {
+                <button class="btn" type="button" [disabled]="busyId() !== null" (click)="add(item)">
+                  @if (busyId() === item.ID) {
+                    Adicionando...
+                  } @else {
+                    <app-icon name="plus" [size]="16" />Adicionar
+                  }
+                </button>
+              }
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+</app-modal>

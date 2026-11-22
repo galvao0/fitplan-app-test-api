@@ -1,0 +1,23 @@
+<header class="head">
+  @if (backLink()) {
+    <a class="back" [routerLink]="backLink()">
+      <app-icon name="back" [size]="16" />
+      {{ backLabel() }}
+    </a>
+  }
+  <h1>{{ title() }}</h1>
+  @if (subtitle()) {
+    <p class="subtitle">{{ subtitle() }}</p>
+  }
+  @if (searchPlaceholder()) {
+    <label class="search">
+      <app-icon name="search" [size]="18" />
+      <input
+        type="search"
+        [placeholder]="searchPlaceholder()"
+        [attr.aria-label]="searchPlaceholder()"
+        (input)="onSearch($event)"
+      />
+    </label>
+  }
+</header>

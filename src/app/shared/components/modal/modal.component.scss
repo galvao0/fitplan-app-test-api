@@ -1,0 +1,59 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(13, 20, 36, 0.5);
+  animation: fade 160ms ease;
+
+  @media (min-width: 641px) {
+    align-items: center;
+    padding: 16px;
+  }
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  border-radius: 20px 20px 0 0;
+  background: var(--surface);
+  animation: sheet 220ms ease;
+
+  @media (min-width: 641px) {
+    border-radius: 16px;
+  }
+}
+
+.dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px 10px 20px;
+
+  h2 {
+    font-size: 28px;
+  }
+}
+
+.dialog-body {
+  padding: 8px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}

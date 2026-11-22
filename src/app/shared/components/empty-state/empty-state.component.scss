@@ -1,0 +1,42 @@
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 48px 24px;
+  border: 1px dashed #c3cadb;
+  border-radius: 14px;
+  text-align: center;
+
+  h3 {
+    font-size: 26px;
+  }
+
+  p {
+    max-width: 340px;
+    color: var(--muted);
+  }
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 4px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.error .badge {
+  background: #fdf0ef;
+  color: var(--danger);
+}
+
+.slot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
